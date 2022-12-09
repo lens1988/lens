@@ -1,0 +1,29 @@
+const fs = require('fs');
+const octokit = require('@octokit/rest')();
+
+octokit.authenticate({
+  type: 'token',
+  token: 'lens1988'
+});
+
+const owner = 'lens1988';
+const repo = 'lens';
+const fileName = 'lens.txt';
+const fileContent = 'This is a sample file for the lens repository.';
+
+const createFile = async () => {
+  try {
+    const { data } = await octokit.repos.createFile({
+      owner,
+      repo,
+      path: fileName,
+      message: 'Add lens file',
+      content: Buffer.from(fileContent).toString('base64')
+    });
+    console.log(`File created successfully: ${data.html_url}`);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+createFile();
